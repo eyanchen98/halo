@@ -57,7 +57,7 @@ import { Toast } from "@halo-dev/components";
 import { i18n } from "@/locales";
 
 const baseURL = import.meta.env.VITE_API_URL;
-
+const modifyBaseURL = baseURL.replace(/\/[^\/]*$/, '');
 const axiosInstance = axios.create({
   baseURL,
   withCredentials: true,
@@ -128,145 +128,145 @@ const apiClient = setupApiClient(axiosInstance);
 function setupApiClient(axios: AxiosInstance) {
   return {
     extension: {
-      configMap: new V1alpha1ConfigMapApi(undefined, baseURL, axios),
-      roleBinding: new V1alpha1RoleBindingApi(undefined, baseURL, axios),
-      role: new V1alpha1RoleApi(undefined, baseURL, axios),
-      setting: new V1alpha1SettingApi(undefined, baseURL, axios),
+      configMap: new V1alpha1ConfigMapApi(undefined, modifyBaseURL, axios),
+      roleBinding: new V1alpha1RoleBindingApi(undefined, modifyBaseURL, axios),
+      role: new V1alpha1RoleApi(undefined, modifyBaseURL, axios),
+      setting: new V1alpha1SettingApi(undefined, modifyBaseURL, axios),
       reverseProxy: new PluginHaloRunV1alpha1ReverseProxyApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
-      plugin: new PluginHaloRunV1alpha1PluginApi(undefined, baseURL, axios),
-      user: new V1alpha1UserApi(undefined, baseURL, axios),
-      theme: new ThemeHaloRunV1alpha1ThemeApi(undefined, baseURL, axios),
-      menu: new V1alpha1MenuApi(undefined, baseURL, axios),
-      menuItem: new V1alpha1MenuItemApi(undefined, baseURL, axios),
-      post: new ContentHaloRunV1alpha1PostApi(undefined, baseURL, axios),
+      plugin: new PluginHaloRunV1alpha1PluginApi(undefined, modifyBaseURL, axios),
+      user: new V1alpha1UserApi(undefined, modifyBaseURL, axios),
+      theme: new ThemeHaloRunV1alpha1ThemeApi(undefined, modifyBaseURL, axios),
+      menu: new V1alpha1MenuApi(undefined, modifyBaseURL, axios),
+      menuItem: new V1alpha1MenuItemApi(undefined, modifyBaseURL, axios),
+      post: new ContentHaloRunV1alpha1PostApi(undefined, modifyBaseURL, axios),
       singlePage: new ContentHaloRunV1alpha1SinglePageApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
       category: new ContentHaloRunV1alpha1CategoryApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
-      tag: new ContentHaloRunV1alpha1TagApi(undefined, baseURL, axios),
+      tag: new ContentHaloRunV1alpha1TagApi(undefined, modifyBaseURL, axios),
       snapshot: new ContentHaloRunV1alpha1SnapshotApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
-      comment: new ContentHaloRunV1alpha1CommentApi(undefined, baseURL, axios),
-      reply: new ContentHaloRunV1alpha1ReplyApi(undefined, baseURL, axios),
+      comment: new ContentHaloRunV1alpha1CommentApi(undefined, modifyBaseURL, axios),
+      reply: new ContentHaloRunV1alpha1ReplyApi(undefined, modifyBaseURL, axios),
       storage: {
-        group: new StorageHaloRunV1alpha1GroupApi(undefined, baseURL, axios),
+        group: new StorageHaloRunV1alpha1GroupApi(undefined, modifyBaseURL, axios),
         attachment: new StorageHaloRunV1alpha1AttachmentApi(
           undefined,
-          baseURL,
+          modifyBaseURL,
           axios
         ),
-        policy: new StorageHaloRunV1alpha1PolicyApi(undefined, baseURL, axios),
+        policy: new StorageHaloRunV1alpha1PolicyApi(undefined, modifyBaseURL, axios),
         policyTemplate: new StorageHaloRunV1alpha1PolicyTemplateApi(
           undefined,
-          baseURL,
+          modifyBaseURL,
           axios
         ),
       },
       annotationSetting: new V1alpha1AnnotationSettingApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
       authProvider: new AuthHaloRunV1alpha1AuthProviderApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
       userConnection: new AuthHaloRunV1alpha1UserConnectionApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
-      backup: new MigrationHaloRunV1alpha1BackupApi(undefined, baseURL, axios),
+      backup: new MigrationHaloRunV1alpha1BackupApi(undefined, modifyBaseURL, axios),
       notifierDescriptors: new NotificationHaloRunV1alpha1NotifierDescriptorApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
       pat: new SecurityHaloRunV1alpha1PersonalAccessTokenApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
     },
     // custom endpoints
-    user: new ApiConsoleHaloRunV1alpha1UserApi(undefined, baseURL, axios),
-    plugin: new ApiConsoleHaloRunV1alpha1PluginApi(undefined, baseURL, axios),
-    theme: new ApiConsoleHaloRunV1alpha1ThemeApi(undefined, baseURL, axios),
-    post: new ApiConsoleHaloRunV1alpha1PostApi(undefined, baseURL, axios),
+    user: new ApiConsoleHaloRunV1alpha1UserApi(undefined, modifyBaseURL, axios),
+    plugin: new ApiConsoleHaloRunV1alpha1PluginApi(undefined, modifyBaseURL, axios),
+    theme: new ApiConsoleHaloRunV1alpha1ThemeApi(undefined, modifyBaseURL, axios),
+    post: new ApiConsoleHaloRunV1alpha1PostApi(undefined, modifyBaseURL, axios),
     singlePage: new ApiConsoleHaloRunV1alpha1SinglePageApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
-    comment: new ApiConsoleHaloRunV1alpha1CommentApi(undefined, baseURL, axios),
-    reply: new ApiConsoleHaloRunV1alpha1ReplyApi(undefined, baseURL, axios),
-    stats: new ApiConsoleHaloRunV1alpha1StatsApi(undefined, baseURL, axios),
+    comment: new ApiConsoleHaloRunV1alpha1CommentApi(undefined, modifyBaseURL, axios),
+    reply: new ApiConsoleHaloRunV1alpha1ReplyApi(undefined, modifyBaseURL, axios),
+    stats: new ApiConsoleHaloRunV1alpha1StatsApi(undefined, modifyBaseURL, axios),
     attachment: new ApiConsoleHaloRunV1alpha1AttachmentApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
-    login: new LoginApi(undefined, baseURL, axios),
-    indices: new ApiConsoleHaloRunV1alpha1IndicesApi(undefined, baseURL, axios),
+    login: new LoginApi(undefined, modifyBaseURL, axios),
+    indices: new ApiConsoleHaloRunV1alpha1IndicesApi(undefined, modifyBaseURL, axios),
     authProvider: new ApiConsoleHaloRunV1alpha1AuthProviderApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
     common: {
-      user: new ApiHaloRunV1alpha1UserApi(undefined, baseURL, axios),
+      user: new ApiHaloRunV1alpha1UserApi(undefined, modifyBaseURL, axios),
     },
-    cache: new V1alpha1CacheApi(undefined, baseURL, axios),
+    cache: new V1alpha1CacheApi(undefined, modifyBaseURL, axios),
     migration: new ApiConsoleMigrationHaloRunV1alpha1MigrationApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
-    system: new ApiConsoleHaloRunV1alpha1SystemApi(undefined, baseURL, axios),
+    system: new ApiConsoleHaloRunV1alpha1SystemApi(undefined, modifyBaseURL, axios),
     notifier: new ApiConsoleHaloRunV1alpha1NotifierApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
     notification: new ApiNotificationHaloRunV1alpha1NotificationApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
     pat: new ApiSecurityHaloRunV1alpha1PersonalAccessTokenApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
     twoFactor: new ApiSecurityHaloRunV1alpha1AuthenticationTwoFactorApi(
       undefined,
-      baseURL,
+      modifyBaseURL,
       axios
     ),
     uc: {
-      post: new UcApiContentHaloRunV1alpha1PostApi(undefined, baseURL, axios),
+      post: new UcApiContentHaloRunV1alpha1PostApi(undefined, modifyBaseURL, axios),
       attachment: new UcApiContentHaloRunV1alpha1AttachmentApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
       snapshot: new UcApiContentHaloRunV1alpha1SnapshotApi(
         undefined,
-        baseURL,
+        modifyBaseURL,
         axios
       ),
     },
