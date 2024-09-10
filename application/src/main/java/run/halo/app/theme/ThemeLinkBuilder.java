@@ -37,7 +37,12 @@ public class ThemeLinkBuilder extends StandardLinkBuilder {
         }
 
         if (isAssetsRequest(link)) {
-            return PathUtils.combinePath(THEME_PREVIEW_PREFIX, theme.getName(), link);
+            int index = link.indexOf(THEME_ASSETS_PREFIX);
+            if (index == 0 || index == -1) {
+                return PathUtils.combinePath(THEME_PREVIEW_PREFIX, theme.getName(), link);
+            }
+            return PathUtils.combinePath(link.substring(0,index),THEME_PREVIEW_PREFIX, theme.getName(), link.substring(index));
+            // return PathUtils.combinePath(THEME_PREVIEW_PREFIX, theme.getName(), link);
         }
 
         // not assets link
@@ -66,6 +71,7 @@ public class ThemeLinkBuilder extends StandardLinkBuilder {
 
     private boolean isAssetsRequest(String link) {
         String assetsPrefix = externalUrlSupplier.get().resolve(THEME_ASSETS_PREFIX).toString();
-        return link.startsWith(assetsPrefix) || link.startsWith(THEME_ASSETS_PREFIX);
+        return link.startsWith(assetsPrefix) || link.startsWith(THEME_ASSETS_PREFIX) || link.contains(assetsPrefix);
+        // return link.startsWith(assetsPrefix) || link.startsWith(THEME_ASSETS_PREFIX);
     }
 }

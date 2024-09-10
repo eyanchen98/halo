@@ -82,6 +82,7 @@ import run.halo.app.extension.ConfigMap;
 import run.halo.app.extension.ReactiveExtensionClient;
 import run.halo.app.extension.router.IListRequest.QueryListRequest;
 import run.halo.app.infra.ReactiveUrlDataBufferFetcher;
+import run.halo.app.infra.utils.PathUtils;
 import run.halo.app.plugin.PluginNotFoundException;
 
 @Slf4j
@@ -350,7 +351,7 @@ public class PluginEndpoint implements CustomEndpoint {
             )
             .orElseGet(() -> pluginService.generateJsBundleVersion()
                 .flatMap(v -> ServerResponse
-                    .temporaryRedirect(buildJsBundleUri("js", v))
+                    .temporaryRedirect(buildJsBundleUri("js", v,request.exchange().getRequest().getPath().contextPath().value()))
                     .build()
                 )
             );
@@ -379,15 +380,15 @@ public class PluginEndpoint implements CustomEndpoint {
             )
             .orElseGet(() -> pluginService.generateJsBundleVersion()
                 .flatMap(v -> ServerResponse
-                    .temporaryRedirect(buildJsBundleUri("css", v))
+                    .temporaryRedirect(buildJsBundleUri("css", v,request.exchange().getRequest().getPath().contextPath().value()))
                     .build()
                 )
             );
     }
 
-    URI buildJsBundleUri(String type, String version) {
+    URI buildJsBundleUri(String type, String version,String contextPath) {
         return URI.create(
-            "/apis/api.console.halo.run/v1alpha1/plugins/-/bundle." + type + "?v=" + version);
+            PathUtils.combinePath(contextPath,"/apis/api.console.halo.run/v1alpha1/plugins/-/bundle.") + type + "?v=" + version);
     }
 
     private Mono<ServerResponse> upgradeFromUri(ServerRequest request) {

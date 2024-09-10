@@ -43,7 +43,7 @@ public class ProxyFilter implements WebFilter {
             .map(matchResult -> {
                 var request = exchange.getRequest();
                 return UriComponentsBuilder.fromUriString(
-                        request.getPath().pathWithinApplication().value())
+                        request.getPath().value())
                     .queryParams(request.getQueryParams())
                     .build()
                     .toUriString();
