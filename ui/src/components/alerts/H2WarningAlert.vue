@@ -7,7 +7,7 @@ import axios from "axios";
 const { data: info } = useQuery<Info>({
   queryKey: ["system-info"],
   queryFn: async () => {
-    const { data } = await axios.get<Info>(`/actuator/info`, {
+    const { data } = await axios.get<Info>(`${import.meta.env.VITE_API_URL}/actuator/info`, {
       withCredentials: true,
     });
     return data;

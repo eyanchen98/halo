@@ -32,7 +32,7 @@ const { currentUserHasPermission } = usePermission();
 const { data: info } = useQuery<Info>({
   queryKey: ["system-info"],
   queryFn: async () => {
-    const { data } = await axios.get<Info>(`/actuator/info`, {
+    const { data } = await axios.get<Info>(`${import.meta.env.VITE_API_URL}/actuator/info`, {
       withCredentials: true,
     });
     return data;
@@ -43,7 +43,7 @@ const { data: info } = useQuery<Info>({
 const { data: globalInfo } = useQuery<GlobalInfo>({
   queryKey: ["system-global-info"],
   queryFn: async () => {
-    const { data } = await axios.get<GlobalInfo>(`/actuator/globalinfo`, {
+    const { data } = await axios.get<GlobalInfo>(`${import.meta.env.VITE_API_URL}/actuator/globalinfo`, {
       withCredentials: true,
     });
     return data;
@@ -54,7 +54,7 @@ const { data: globalInfo } = useQuery<GlobalInfo>({
 const { data: startup } = useQuery<Startup>({
   queryKey: ["system-startup-info"],
   queryFn: async () => {
-    const { data } = await axios.get<Startup>(`/actuator/startup`, {
+    const { data } = await axios.get<Startup>(`${import.meta.env.VITE_API_URL}/actuator/startup`, {
       withCredentials: true,
     });
     return data;
@@ -193,7 +193,7 @@ const handleCopy = () => {
 
 const handleDownloadLogfile = () => {
   axios
-    .get(`/actuator/logfile`)
+    .get(`${import.meta.env.VITE_API_URL}/actuator/logfile`)
     .then((response) => {
       const blob = new Blob([response.data]);
       const downloadElement = document.createElement("a");

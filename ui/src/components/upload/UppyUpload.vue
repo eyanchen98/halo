@@ -66,7 +66,7 @@ const uppy = computed(() => {
     autoProceed: props.autoProceed,
   })
     .use(XHRUpload, {
-      endpoint: `${props.endpoint}`,
+      endpoint: `${import.meta.env.VITE_API_URL}${props.endpoint}`,
       allowedMetaFields: props.allowedMetaFields,
       withCredentials: true,
       formData: true,

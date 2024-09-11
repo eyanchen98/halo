@@ -28,7 +28,7 @@ import IconLogo from "~icons/core/logo?width=5rem&height=2rem";
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-
+const baseUrl = ref<string>(import.meta.env.VITE_API_URL);
 const moreMenuVisible = ref(false);
 const moreMenuRootVisible = ref(false);
 
@@ -43,7 +43,7 @@ const handleLogout = () => {
     cancelText: t("core.common.buttons.cancel"),
     onConfirm: async () => {
       try {
-        await axios.post(`/logout`, undefined, {
+        await axios.post(`${import.meta.env.VITE_API_URL}/logout`, undefined, {
           withCredentials: true,
         });
 
@@ -53,7 +53,7 @@ const handleLogout = () => {
         document.cookie =
           "XSRF-TOKEN=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 
-        window.location.href = "/console/login";
+        window.location.href = `${import.meta.env.VITE_API_URL}/console/login`;
       } catch (error) {
         console.error("Failed to logout", error);
       }
@@ -118,7 +118,7 @@ const disallowAccessConsole = computed(() => {
     >
       <div class="logo flex justify-center pb-5 pt-5">
         <a
-          href="/"
+          :href="baseUrl + '/'"
           target="_blank"
           :title="$t('core.sidebar.operations.visit_homepage.title')"
         >

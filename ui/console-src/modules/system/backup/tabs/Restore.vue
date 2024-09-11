@@ -38,7 +38,7 @@ const onProcessCompleted = () => {
 };
 
 async function handleShutdown() {
-  await axios.post(`/actuator/restart`);
+  await axios.post(`${import.meta.env.VITE_API_URL}/actuator/restart`);
   Toast.success(t("core.backup.operations.restart.toast_success"));
 
   setTimeout(() => {
@@ -92,7 +92,7 @@ function handleRestoreFromBackup(backupFile: BackupFile) {
 useQuery({
   queryKey: ["check-health"],
   queryFn: async () => {
-    const { data } = await axios.get("/actuator/health");
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/actuator/health`);
     return data;
   },
   onSuccess(data) {

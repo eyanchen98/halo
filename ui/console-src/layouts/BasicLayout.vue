@@ -35,7 +35,7 @@ const { t } = useI18n();
 
 const moreMenuVisible = ref(false);
 const moreMenuRootVisible = ref(false);
-
+const baseUrl = ref<string>(import.meta.env.VITE_API_URL);
 const userStore = useUserStore();
 
 const { currentRoles, currentUser } = storeToRefs(userStore);
@@ -47,7 +47,7 @@ const handleLogout = () => {
     cancelText: t("core.common.buttons.cancel"),
     onConfirm: async () => {
       try {
-        await axios.post(`/logout`, undefined, {
+        await axios.post(`${import.meta.env.VITE_API_URL}/logout`, undefined, {
           withCredentials: true,
         });
 
@@ -122,7 +122,7 @@ onMounted(() => {
     >
       <div class="logo flex justify-center pb-5 pt-5">
         <a
-          href="/"
+          :href="baseUrl + '/'"
           target="_blank"
           :title="$t('core.sidebar.operations.visit_homepage.title')"
         >

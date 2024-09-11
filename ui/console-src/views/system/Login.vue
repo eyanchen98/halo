@@ -18,7 +18,7 @@ function onLoginSucceed() {
 }
 
 function onSignupSucceed() {
-  window.location.href = "/uc";
+  window.location.href = `${import.meta.env.VITE_API_URL}/uc`;
 }
 
 const type = useRouteQuery<string>("type", "");

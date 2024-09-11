@@ -69,7 +69,7 @@ export function setupAuthCheckGuard(router: Router) {
       });
 
       if (hasDisallowAccessConsoleRole) {
-        window.location.href = "/uc";
+        window.location.href = `${import.meta.env.VITE_API_URL}/uc`;
         return;
       }
 

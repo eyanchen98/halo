@@ -27,7 +27,9 @@ export async function setupPluginModules(app: App) {
 
 async function loadPluginBundle() {
   const { load } = useScriptTag(
-    `/apis/api.console.halo.run/v1alpha1/plugins/-/bundle.js?t=${Date.now()}`
+    `${
+      import.meta.env.VITE_API_URL
+    }/apis/api.console.halo.run/v1alpha1/plugins/-/bundle.js?t=${Date.now()}`
   );
   await load();
 }
@@ -70,7 +72,9 @@ function registerPluginIfAvailable(
 
 async function loadPluginStyles() {
   await loadStyle(
-    `/apis/api.console.halo.run/v1alpha1/plugins/-/bundle.css?t=${Date.now()}`
+    `${
+      import.meta.env.VITE_API_URL
+    }/apis/api.console.halo.run/v1alpha1/plugins/-/bundle.css?t=${Date.now()}`
   );
 }
 

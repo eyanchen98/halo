@@ -13,6 +13,10 @@ export interface ProblemDetail {
 }
 
 export function setupApiClient() {
+  axiosInstance.interceptors.request.use(config => {
+    config.baseURL = import.meta.env.VITE_API_URL + config.baseURL;
+    return config;
+  },error => Promise.reject(error));
   axiosInstance.interceptors.response.use(
     (response) => {
       return response;

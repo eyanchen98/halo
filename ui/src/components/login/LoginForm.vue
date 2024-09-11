@@ -56,7 +56,7 @@ async function handleLogin(data: {
     encrypt.setPublicKey(publicKey.base64Format as string);
 
     await axios.post(
-      `/login?remember-me=${data.rememberMe}`,
+      `${import.meta.env.VITE_API_URL}/login?remember-me=${data.rememberMe}`,
       qs.stringify({
         _csrf: _csrf.value,
         username: data.username,

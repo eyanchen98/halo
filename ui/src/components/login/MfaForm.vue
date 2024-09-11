@@ -29,7 +29,7 @@ async function onSubmit({ code }: { code: string }) {
       return;
     }
     await axios.post(
-      `/login/2fa/totp`,
+      `${import.meta.env.VITE_API_URL}/login/2fa/totp`,
       qs.stringify({
         code,
         _csrf,

@@ -37,7 +37,7 @@ const {
 });
 
 function handleRouteToNotification(notification: Notification) {
-  window.location.href = `/uc/notifications?name=${notification.metadata.name}`;
+  window.location.href = `${import.meta.env.VITE_API_URL}/uc/notifications?name=${notification.metadata.name}`;
 }
 </script>
 

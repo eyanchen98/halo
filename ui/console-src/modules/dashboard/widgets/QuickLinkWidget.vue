@@ -41,7 +41,7 @@ const actions: Action[] = [
       "core.dashboard.widgets.presets.quicklink.actions.user_center.title"
     ),
     action: () => {
-      window.location.href = "/uc/profile";
+      window.location.href = `${import.meta.env.VITE_API_URL}/uc/profile`;
     },
   },
   {
