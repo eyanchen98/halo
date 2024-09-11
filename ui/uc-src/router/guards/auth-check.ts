@@ -13,9 +13,9 @@ export function setupAuthCheckGuard(router: Router) {
     const userStore = useUserStore();
 
     if (userStore.isAnonymous) {
-      window.location.href = `/console/login?redirect_uri=${encodeURIComponent(
-        window.location.href
-      )}`;
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/console/login?redirect_uri=${encodeURIComponent(window.location.href)}`;
       return;
     }
 

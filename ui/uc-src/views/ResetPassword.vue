@@ -32,7 +32,7 @@ async function onSubmit(data: ResetPasswordForm) {
 
     Toast.success(t("core.uc_reset_password.operations.reset.toast_success"));
 
-    window.location.href = "/console/login";
+    window.location.href = `${import.meta.env.VITE_API_URL}/console/login`;
   } catch (error) {
     console.error("Failed to reset password", error);
   } finally {

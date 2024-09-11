@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, ref, watch} from "vue";
+import { computed, ref, watch } from "vue";
 import LoginForm from "@/components/login/LoginForm.vue";
 import { useRouteQuery } from "@vueuse/router";
 import SignupForm from "@/components/signup/SignupForm.vue";
@@ -22,7 +22,7 @@ function onLoginSucceed() {
 }
 
 function onSignupSucceed() {
-  window.location.href = "/uc";
+  window.location.href = `${import.meta.env.VITE_API_URL}/uc`;
 }
 
 const type = useRouteQuery<string>("type", "");
@@ -80,7 +80,7 @@ watch(
     <div class="flex justify-center pt-3.5">
       <a
         class="inline-flex items-center gap-0.5 text-xs text-gray-600 hover:text-gray-900"
-        :href="baseUrl"
+        :href="baseUrl + '/'"
       >
         <MdiKeyboardBackspace class="!h-3.5 !w-3.5" />
         <span> {{ $t("core.login.operations.return_site") }} </span>
