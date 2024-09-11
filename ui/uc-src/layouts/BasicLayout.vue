@@ -114,7 +114,7 @@ const disallowAccessConsole = computed(() => {
     >
       <div class="logo flex justify-center pb-5 pt-5">
         <a
-          :href="baseUrl + '/'"
+          :href="baseUrl"
           target="_blank"
           :title="$t('core.sidebar.operations.visit_homepage.title')"
         >
