@@ -6,7 +6,7 @@ import { createViteConfig } from "./src/vite/config-builder";
 export default ({ mode }: { mode: string }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return createViteConfig({
-    base: env.VITE_BASE_URL,
+    base: env.VITE_API_URL + "/console/",
     entryFile: "/console-src/main.ts",
     port: 3000,
     outDir: path.resolve("build/dist/console"),

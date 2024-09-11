@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, watch } from "vue";
+import {computed, ref, watch} from "vue";
 import LoginForm from "@/components/login/LoginForm.vue";
 import { useRouteQuery } from "@vueuse/router";
 import SignupForm from "@/components/signup/SignupForm.vue";
@@ -13,6 +13,7 @@ import LocaleChange from "@/components/common/LocaleChange.vue";
 
 const { globalInfo } = useGlobalInfoFetch();
 const { t } = useI18n();
+const baseUrl = ref<string>(import.meta.env.VITE_API_URL);
 
 const SIGNUP_TYPE = "signup";
 
@@ -79,7 +80,7 @@ watch(
     <div class="flex justify-center pt-3.5">
       <a
         class="inline-flex items-center gap-0.5 text-xs text-gray-600 hover:text-gray-900"
-        href="/"
+        :href="baseUrl"
       >
         <MdiKeyboardBackspace class="!h-3.5 !w-3.5" />
         <span> {{ $t("core.login.operations.return_site") }} </span>
