@@ -7,7 +7,7 @@ export function useSessionKeepAlive() {
 
   useQuery({
     queryKey: ["health", "keep-session-alive"],
-    queryFn: () => fetch("/actuator/health"),
+    queryFn: () => fetch(`${import.meta.env.VITE_API_URL}/actuator/health`),
     refetchInterval: 1000 * 60 * 5, // 5 minutes
     refetchIntervalInBackground: true,
     refetchOnWindowFocus: true,

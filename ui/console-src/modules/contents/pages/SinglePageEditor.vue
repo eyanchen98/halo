@@ -413,6 +413,7 @@ useAutoSaveContent(currentCache, toRef(formState.value.content, "raw"), () => {
 // SinglePage preview
 const previewModal = ref(false);
 const previewPending = ref(false);
+const baseUrl = ref(import.meta.env.VITE_API_URL);
 
 const handlePreview = async () => {
   previewPending.value = true;
@@ -458,7 +459,7 @@ async function handleUploadImage(file: File, options?: AxiosRequestConfig) {
   <UrlPreviewModal
     v-if="previewModal"
     :title="formState.page.spec.title"
-    :url="`/preview/singlepages/${formState.page.metadata.name}`"
+    :url="`${baseUrl}/preview/singlepages/${formState.page.metadata.name}`"
     @close="previewModal = false"
   />
 

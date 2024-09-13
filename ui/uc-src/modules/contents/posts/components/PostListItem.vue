@@ -38,9 +38,9 @@ const props = withDefaults(
 const externalUrl = computed(() => {
   const { status, metadata } = props.post.post;
   if (metadata.labels?.[postLabels.PUBLISHED] === "true") {
-    return status?.permalink;
+    return `${import.meta.env.VITE_API_URL}` + status?.permalink;
   }
-  return `/preview/posts/${metadata.name}`;
+  return `${import.meta.env.VITE_API_URL}/preview/posts/${metadata.name}`;
 });
 
 const publishStatus = computed(() => {

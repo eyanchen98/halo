@@ -437,6 +437,7 @@ useAutoSaveContent(currentCache, toRef(formState.value.content, "raw"), () => {
 // Post preview
 const previewModal = ref(false);
 const previewPending = ref(false);
+const baseUrl = ref(import.meta.env.VITE_API_URL);
 
 const handlePreview = async () => {
   previewPending.value = true;
@@ -497,7 +498,7 @@ useSlugify(
   <UrlPreviewModal
     v-if="previewModal"
     :title="formState.post.spec.title"
-    :url="`/preview/posts/${formState.post.metadata.name}`"
+    :url="`${baseUrl}/preview/posts/${formState.post.metadata.name}`"
     @close="previewModal = false"
   />
 

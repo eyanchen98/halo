@@ -47,9 +47,9 @@ const selectedPageNames = inject<Ref<string[]>>("selectedPageNames", ref([]));
 const externalUrl = computed(() => {
   const { metadata, status } = props.singlePage.page;
   if (metadata.labels?.[singlePageLabels.PUBLISHED] === "true") {
-    return status?.permalink;
+    return `${import.meta.env.VITE_API_URL}` + status?.permalink;
   }
-  return `/preview/singlepages/${metadata.name}`;
+  return `${import.meta.env.VITE_API_URL}/preview/singlepages/${metadata.name}`;
 });
 
 const publishStatus = computed(() => {
