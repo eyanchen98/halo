@@ -162,7 +162,7 @@ const disallowAccessConsole = computed(() => {
               v-if="!disallowAccessConsole"
               v-tooltip="$t('core.uc_sidebar.operations.console.tooltip')"
               class="group inline-block cursor-pointer rounded-full p-1.5 transition-all hover:bg-gray-100"
-              href="/console"
+              :href="baseUrl + '/console'"
             >
               <IconSettings3Line
                 class="h-5 w-5 text-gray-600 group-hover:text-gray-900"

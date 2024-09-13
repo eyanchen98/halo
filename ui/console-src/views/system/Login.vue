@@ -8,6 +8,7 @@ import { useGlobalInfoFetch } from "@console/composables/use-global-info";
 import { useRouteQuery } from "@vueuse/router";
 import { computed } from "vue";
 import MdiKeyboardBackspace from "~icons/mdi/keyboard-backspace";
+import { ref } from "vue";
 
 const { globalInfo } = useGlobalInfoFetch();
 
@@ -22,6 +23,7 @@ function onSignupSucceed() {
 }
 
 const type = useRouteQuery<string>("type", "");
+const baseUrl = ref<string>(import.meta.env.VITE_API_URL);
 
 function handleChangeType() {
   type.value = type.value === SIGNUP_TYPE ? "" : SIGNUP_TYPE;
@@ -70,7 +72,7 @@ useAppTitle(
     <div class="flex justify-center pt-3.5">
       <a
         class="inline-flex items-center gap-0.5 text-xs text-gray-600 hover:text-gray-900"
-        href="/"
+        :href="baseUrl + '/'"
       >
         <MdiKeyboardBackspace class="!h-3.5 !w-3.5" />
         <span> {{ $t("core.login.operations.return_site") }} </span>

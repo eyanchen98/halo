@@ -185,7 +185,7 @@ onMounted(() => {
             <a
               v-tooltip="$t('core.sidebar.operations.profile.tooltip')"
               class="group inline-block cursor-pointer rounded-full p-1.5 transition-all hover:bg-gray-100"
-              href="/uc"
+              :href="baseUrl + '/uc'"
             >
               <IconAccountCircleLine
                 class="h-5 w-5 text-gray-600 group-hover:text-gray-900"

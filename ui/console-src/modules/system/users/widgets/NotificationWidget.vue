@@ -13,7 +13,8 @@ import {
 } from "@halo-dev/components";
 import { useQuery } from "@tanstack/vue-query";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
-
+import { ref } from "vue";
+const baseUrl = ref<string>(import.meta.env.VITE_API_URL);
 const { currentUser } = useUserStore();
 
 const {
@@ -37,7 +38,9 @@ const {
 });
 
 function handleRouteToNotification(notification: Notification) {
-  window.location.href = `${import.meta.env.VITE_API_URL}/uc/notifications?name=${notification.metadata.name}`;
+  window.location.href = `${
+    import.meta.env.VITE_API_URL
+  }/uc/notifications?name=${notification.metadata.name}`;
 }
 </script>
 
@@ -51,7 +54,7 @@ function handleRouteToNotification(notification: Notification) {
       <div style="padding: 12px 16px">
         <a
           class="text-sm text-gray-600 hover:text-gray-900"
-          href="/uc/notifications"
+          :href="baseUrl + '/uc/notifications'"
         >
           {{ $t("core.common.buttons.view_all") }}
         </a>

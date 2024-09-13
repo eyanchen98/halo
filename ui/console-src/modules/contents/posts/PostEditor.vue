@@ -437,7 +437,7 @@ useAutoSaveContent(currentCache, toRef(formState.value.content, "raw"), () => {
 // Post preview
 const previewModal = ref(false);
 const previewPending = ref(false);
-const baseUrl = ref(import.meta.env.VITE_API_URL);
+const baseUrl = ref<string>(import.meta.env.VITE_API_URL);
 
 const handlePreview = async () => {
   previewPending.value = true;
