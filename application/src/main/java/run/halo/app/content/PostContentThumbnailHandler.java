@@ -25,7 +25,8 @@ public class PostContentThumbnailHandler implements ReactivePostContentHandler {
 
     @Override
     public Mono<PostContentContext> handle(@NonNull PostContentContext postContent) {
-        var html = postContent.getContent();
+        return Mono.just(postContent);
+        /*var html = postContent.getContent();
         return HtmlThumbnailSrcsetInjector.injectSrcset(html,
                 src -> generateSrcset(URI.create(src), thumbnailService)
             )
@@ -35,6 +36,6 @@ public class PostContentThumbnailHandler implements ReactivePostContentHandler {
                 return Mono.just(html);
             })
             .doOnNext(postContent::setContent)
-            .thenReturn(postContent);
+            .thenReturn(postContent);*/
     }
 }

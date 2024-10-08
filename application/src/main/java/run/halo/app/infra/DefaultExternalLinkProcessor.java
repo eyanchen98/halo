@@ -2,6 +2,7 @@ package run.halo.app.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.autoconfigure.web.reactive.WebFluxProperties;
 import org.springframework.stereotype.Component;
 import run.halo.app.infra.utils.PathUtils;
 
@@ -15,6 +16,7 @@ import run.halo.app.infra.utils.PathUtils;
 @RequiredArgsConstructor
 public class DefaultExternalLinkProcessor implements ExternalLinkProcessor {
     private final ExternalUrlSupplier externalUrlSupplier;
+    private final WebFluxProperties webFluxProperties;
 
     @Override
     public String processLink(String link) {
@@ -26,7 +28,7 @@ public class DefaultExternalLinkProcessor implements ExternalLinkProcessor {
     }
 
     String append(String externalLink, String link) {
-        return StringUtils.removeEnd(externalLink, "/")
-            + StringUtils.prependIfMissing(link, "/");
+        return StringUtils.removeEnd(externalLink, webFluxProperties.getBasePath())
+            + StringUtils.prependIfMissing(link, webFluxProperties.getBasePath());
     }
 }
