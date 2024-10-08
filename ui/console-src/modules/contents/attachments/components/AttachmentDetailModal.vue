@@ -135,10 +135,7 @@ const showDisplayNameForm = ref(false);
               >
                 <LazyImage
                   :alt="attachment?.spec.displayName"
-                  :src="
-                    attachment?.status?.thumbnails?.M ||
-                    attachment?.status?.permalink
-                  "
+                  :src="attachment?.status?.permalink"
                   classes="max-w-full cursor-pointer rounded sm:max-w-[50%]"
                 >
                   <template #loading>

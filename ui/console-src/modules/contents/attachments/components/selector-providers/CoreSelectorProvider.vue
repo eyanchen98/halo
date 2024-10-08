@@ -316,10 +316,7 @@ const viewType = useLocalStorage("attachment-selector-view-type", "grid");
                 v-if="isImage(attachment.spec.mediaType)"
                 :key="attachment.metadata.name"
                 :alt="attachment.spec.displayName"
-                :src="
-                  attachment.status?.thumbnails?.S ||
-                  attachment.status?.permalink
-                "
+                :src="attachment.status?.permalink"
                 classes="pointer-events-none object-cover group-hover:opacity-75 transform-gpu"
               >
                 <template #loading>
