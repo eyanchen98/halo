@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
@@ -69,6 +70,9 @@ public class PostRouteFactory implements RouteFactory {
     private final TitleVisibilityIdentifyCalculator titleVisibilityIdentifyCalculator;
 
     private final LocaleContextResolver localeContextResolver;
+
+    @Value("${app.prefixes:pro-,new-}")
+    private List<String> prefixes;
 
     @Override
     public RouterFunction<ServerResponse> create(String pattern) {
@@ -122,6 +126,32 @@ public class PostRouteFactory implements RouteFactory {
                 );
             })
             .flatMap(postVo -> {
+                //start
+                List<String> xOriginalURIs = request.exchange().getRequest().getHeaders().get("X-Original-URI");
+                if(xOriginalURIs == null || xOriginalURIs.isEmpty()){
+                    return Mono.error(new NotFoundException("Post not found"));
+                }
+                List<String> categorySlugs = postVo.getCategories().stream()
+                    .map(categoryVo -> categoryVo.getSpec().getSlug())
+                    .filter(slug -> {
+                        for (String prefix : prefixes) {
+                            if (slug.startsWith(prefix)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    })
+                    .toList();
+                if (!categorySlugs.isEmpty()) {
+                    boolean matched = categorySlugs.stream()
+                        .anyMatch(categorySlug ->
+                            xOriginalURIs.stream().anyMatch(referer -> referer.contains(categorySlug))
+                        );
+                    if (!matched) {
+                        return Mono.error(new NotFoundException("Post not found"));
+                    }
+                }
+                //end
                 Map<String, Object> model = ModelMapUtils.postModel(postVo);
                 return determineTemplate(request, postVo)
                     .flatMap(templateName -> ServerResponse.ok().render(templateName, model));
