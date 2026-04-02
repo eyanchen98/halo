@@ -16,6 +16,8 @@ public interface PostService {
 
     Mono<ListResult<ListedPost>> listPost(PostQuery query);
 
+    Mono<Boolean> isSlugExisted(String slug, String excludeName);
+
     Mono<Post> draftPost(PostRequest postRequest);
 
     Mono<Post> updatePost(PostRequest postRequest);

@@ -1,6 +1,10 @@
 package run.halo.app.content.impl;
 
+import static run.halo.app.extension.index.query.QueryFactory.and;
+import static run.halo.app.extension.index.query.QueryFactory.equal;
 import static run.halo.app.extension.index.query.QueryFactory.in;
+import static run.halo.app.extension.index.query.QueryFactory.isNull;
+import static run.halo.app.extension.index.query.QueryFactory.notEqual;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -185,14 +189,39 @@ public class PostServiceImpl extends AbstractContentService implements PostServi
             });
     }
 
+    public Mono<Boolean> isSlugExisted(String slug, String excludeName) {
+        if (StringUtils.isBlank(slug)) {
+            return Mono.just(false);
+        }
+        var listOptions = new ListOptions();
+        var query = and(
+            equal("spec.slug", slug),
+            isNull("metadata.deletionTimestamp"),
+            equal("spec.deleted", "false")
+        );
+        if (StringUtils.isNotBlank(excludeName)) {
+            query = and(query, notEqual("metadata.name", excludeName));
+        }
+        listOptions.setFieldSelector(FieldSelector.of(query));
+        return client.listAll(Post.class, listOptions, Sort.unsorted())
+            .hasElements();
+    }
+
     @Override
     public Mono<Post> draftPost(PostRequest postRequest) {
         return Mono.defer(
                 () -> {
                     var post = postRequest.post();
-                    return getContextUsername()
-                        .doOnNext(username -> post.getSpec().setOwner(username))
-                        .thenReturn(post);
+                    String slug = post.getSpec().getSlug();
+                    return isSlugExisted(slug, null)
+                        .flatMap(existed -> {
+                            if (existed) {
+                                return Mono.error(new ServerWebInputException("当前文章别名: " + slug + " 已存在，请修改后重试"));
+                            }
+                            return getContextUsername()
+                                .doOnNext(username -> post.getSpec().setOwner(username))
+                                .thenReturn(post);
+                        });
                 })
             .flatMap(client::create)
             .flatMap(post -> {
@@ -242,22 +271,29 @@ public class PostServiceImpl extends AbstractContentService implements PostServi
     @Override
     public Mono<Post> updatePost(PostRequest postRequest) {
         Post post = postRequest.post();
-        String headSnapshot = post.getSpec().getHeadSnapshot();
-        String releaseSnapshot = post.getSpec().getReleaseSnapshot();
-        String baseSnapshot = post.getSpec().getBaseSnapshot();
-
-        if (StringUtils.equals(releaseSnapshot, headSnapshot)) {
-            // create new snapshot to update first
-            return draftContent(baseSnapshot, postRequest.contentRequest(), headSnapshot)
-                .flatMap(contentWrapper -> {
-                    post.getSpec().setHeadSnapshot(contentWrapper.getSnapshotName());
-                    return client.update(post);
-                });
-        }
-        return updateContent(baseSnapshot, postRequest.contentRequest())
-            .flatMap(contentWrapper -> {
-                post.getSpec().setHeadSnapshot(contentWrapper.getSnapshotName());
-                return client.update(post);
+        String name = post.getMetadata().getName();
+        String slug = post.getSpec().getSlug();
+        return isSlugExisted(slug, name)
+            .flatMap(existed -> {
+                if (existed) {
+                    return Mono.error(new ServerWebInputException("当前文章别名: " + slug + " 已存在，请修改后重试"));
+                }
+                String headSnapshot = post.getSpec().getHeadSnapshot();
+                String releaseSnapshot = post.getSpec().getReleaseSnapshot();
+                String baseSnapshot = post.getSpec().getBaseSnapshot();
+                if (StringUtils.equals(releaseSnapshot, headSnapshot)) {
+                    // create new snapshot to update first
+                    return draftContent(baseSnapshot, postRequest.contentRequest(), headSnapshot)
+                        .flatMap(contentWrapper -> {
+                            post.getSpec().setHeadSnapshot(contentWrapper.getSnapshotName());
+                            return client.update(post);
+                        });
+                }
+                return updateContent(baseSnapshot, postRequest.contentRequest())
+                    .flatMap(contentWrapper -> {
+                        post.getSpec().setHeadSnapshot(contentWrapper.getSnapshotName());
+                        return client.update(post);
+                    });
             });
     }
 

@@ -329,6 +329,16 @@ public class PostEndpoint implements CustomEndpoint {
             .orElse(false);
 
         return Mono.defer(() -> client.get(Post.class, name)
+                .flatMap(post -> {
+                    String slug = post.getSpec().getSlug();
+                    return postService.isSlugExisted(slug, post.getMetadata().getName())
+                        .flatMap(existed -> {
+                            if (existed) {
+                                return Mono.error(new ServerWebInputException("当前文章别名: " + slug + " 已存在，请修改后重试"));
+                            }
+                            return Mono.just(post);
+                        });
+                })
                 .doOnNext(post -> {
                     var spec = post.getSpec();
                     request.queryParam("headSnapshot").ifPresent(spec::setHeadSnapshot);
