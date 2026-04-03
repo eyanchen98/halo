@@ -189,9 +189,9 @@ public class PostServiceImpl extends AbstractContentService implements PostServi
             });
     }
 
-    public Mono<Boolean> isSlugExisted(String slug, String excludeName) {
+    public Mono<Post> getSlugExistPost(String slug, String excludeName) {
         if (StringUtils.isBlank(slug)) {
-            return Mono.just(false);
+            return Mono.empty();
         }
         var listOptions = new ListOptions();
         var query = and(
@@ -204,7 +204,7 @@ public class PostServiceImpl extends AbstractContentService implements PostServi
         }
         listOptions.setFieldSelector(FieldSelector.of(query));
         return client.listAll(Post.class, listOptions, Sort.unsorted())
-            .hasElements();
+            .next();
     }
 
     @Override
@@ -213,15 +213,12 @@ public class PostServiceImpl extends AbstractContentService implements PostServi
                 () -> {
                     var post = postRequest.post();
                     String slug = post.getSpec().getSlug();
-                    return isSlugExisted(slug, null)
-                        .flatMap(existed -> {
-                            if (existed) {
-                                return Mono.error(new ServerWebInputException("当前文章别名: " + slug + " 已存在，请修改后重试"));
-                            }
-                            return getContextUsername()
-                                .doOnNext(username -> post.getSpec().setOwner(username))
-                                .thenReturn(post);
-                        });
+                    return this.getSlugExistPost(slug, null)
+                        .<Post>flatMap(existPost -> Mono.error(new ServerWebInputException(
+                            "当前文章别名: " + slug + " 已被文章 [" + existPost.getSpec().getTitle() + "] 占用，请修改后重试")))
+                        .switchIfEmpty(getContextUsername()
+                            .doOnNext(username -> post.getSpec().setOwner(username))
+                            .thenReturn(post));
                 })
             .flatMap(client::create)
             .flatMap(post -> {
@@ -273,11 +270,10 @@ public class PostServiceImpl extends AbstractContentService implements PostServi
         Post post = postRequest.post();
         String name = post.getMetadata().getName();
         String slug = post.getSpec().getSlug();
-        return isSlugExisted(slug, name)
-            .flatMap(existed -> {
-                if (existed) {
-                    return Mono.error(new ServerWebInputException("当前文章别名: " + slug + " 已存在，请修改后重试"));
-                }
+        return this.getSlugExistPost(slug, name)
+            .<Post>flatMap(existPost -> Mono.error(new ServerWebInputException(
+                "当前文章别名: " + slug + " 已被文章 [" + existPost.getSpec().getTitle() + "] 占用，请修改后重试")))
+            .switchIfEmpty(Mono.defer(() -> {
                 String headSnapshot = post.getSpec().getHeadSnapshot();
                 String releaseSnapshot = post.getSpec().getReleaseSnapshot();
                 String baseSnapshot = post.getSpec().getBaseSnapshot();
@@ -294,7 +290,7 @@ public class PostServiceImpl extends AbstractContentService implements PostServi
                         post.getSpec().setHeadSnapshot(contentWrapper.getSnapshotName());
                         return client.update(post);
                     });
-            });
+            }));
     }
 
     @Override
